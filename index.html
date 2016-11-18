@@ -101,6 +101,7 @@
               <div class="demoContainer u-mt+">
                 <div class="flex flex--col">
                   <div class="demo u-p+">
+                    <p style="padding:0 0 5px;">Since this is a Mobile component, ensure your browser is either on a mobile device, or in mobile mode, and swipe from the left side of the black rectangle.</p>
                     <div class="position-relative">
                       <px-drawer
                           id="drawer1"
@@ -114,9 +115,8 @@
                       </px-drawer>
                     </div>
                   </div>
-                  <div>
-                    <px-demo-snippet
-                        element-properties={{item}}
+                  <div>                    <px-demo-snippet
+                        element-properties="{{item}}"
                         element-name="px-drawer">
                     </px-demo-snippet>
                   </div>
@@ -176,7 +176,8 @@
           overlay: true,
           fixed: false,
           swipeOpen: true,
-          debug: true
+          debug: true,
+          parentComponent: ["<p>Since this is a Mobile component, ensure your browser is either on a mobile device, or in mobile mode, and swipe from the left side of the black rectangle.</p><div style='overflow: hidden;position: relative;height: 100%;width: 100%;min-height: 300px;border: 2px solid black;'>", "</div>"]
         }
       ],
       indexPlusOne = function(num) {
