@@ -1,43 +1,38 @@
 <!--
-/*
- * Copyright (c) 2016 GE Global Research. All rights reserved.
- *
- * The copyright to the computer software herein is the property of
- * GE Global Research. The software may be used and/or copied only
- * with the written permission of GE Global Research or in accordance
- * with the terms and conditions stipulated in the agreement/contract
- * under which the software has been supplied.
- */
- -->
+Copyright (c) 2016 GE Global Research. All rights reserved.
+
+The copyright to the computer software herein is the property of
+GE Global Research. The software may be used and/or copied only
+with the written permission of GE Global Research or in accordance
+with the terms and conditions stipulated in the agreement/contract
+under which the software has been supplied.
+-->
+
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
 <link rel="import" href="../iron-fit-behavior/iron-fit-behavior.html">
-<link rel="import" href="px-drawer-styles.html">
+<link rel="import" href="css/px-drawer-styles.html">
+
 <!--
 The `px-drawer` is a navigation drawer that can slide in from the left, right, top or bottom.
 
-
 For more demos visit <a href="demo.html" target="_blank">here</a>
-
 
 ### Usage
 
 ```
-
   <style is="custom-style">
-    :root{
-      --px-drawer:{
+    :root {
+      --px-drawer: {
         background-color: #000;
       }
     }
   </style>
   <px-drawer id="drawer1" fixed overlay>
-    <p>
-      This is content inside of the drawer
-    </p>
+    <p>This is content inside of the drawer.</p>
   </px-drawer>
-  <button onclick="document.getElementById('drawer1').toggle()">
-    Toggle
+  <button onclick="document.querySelector('#drawer1').toggle()">
+    Click to toggle
   </button>
 ```
 
@@ -54,14 +49,15 @@ Custom property | Description | Default
 `--px-drawer-overlay-background` | The background color of the overlay | `rgba(0, 0, 0, 0.5))`
 
 @element px-drawer.html
-@blurb px-drawer A responsive drawer.
+@blurb A responsive mobile first web component for hiding content off screen.
 @demo demo.html
 @demo mobile-demo.html
 @homepage index.html
 -->
+
 <dom-module id="px-drawer">
   <template strip-whitespace>
-    <style include="px-drawer-css">
+    <style include="px-drawer-styles">
       :host {
         display: block;
       }
@@ -163,145 +159,415 @@ Custom property | Description | Default
   <script>
     Polymer({
       is: 'px-drawer',
+
       behaviors: [
         Polymer.IronResizableBehavior, Polymer.IronFitBehavior
       ],
+
       properties: {
+
         /**
-         * The state of the drawer
+         * The state of the drawer. If `true`, the drawer is opened. Can be changed
+         * externally by setting the drawer's property or calling the `toggle` method
+         * on the drawer instance. Changed internally through user swipe actions.
+         *
+         * @prop opened
+         * @type Boolean
+         * @default false
          */
         opened: {
           type: Boolean,
           reflectToAttribute: true,
-          value: function(){
-            return false;
-          },
+          value: false,
           notify: true,
-          observer: '_openHandler'
+          observer: '_openedHandler'
         },
+
         /**
-         * Persistent navigation drawers can toggle open or closed.
-         * Persistent navigation drawers are acceptable for all sizes larger than mobile.
+         * Makes drawers persistent if `true`. Persistent drawers can still be toggled
+         * open or closed. Persistent drawers are acceptable for all screen sizes
+         * larger than mobile. Note that when `persistent` is enabled that the
+         * user will not be able to swipe to open/close the drawer (the drawer
+         * opened state will need to be managed manaually).
+         *
+         * @prop persistent
+         * @type Boolean
+         * @default false
          */
         persistent: {
           type: Boolean,
           notify: true,
-          reflectToAttribute: true
+          reflectToAttribute: true,
+          value: false
         },
+
         /**
-         * To position the drawer in fixed mode.
+         * Positions the drawer in fixed mode if `true`.
+         *
+         * @prop fixed
+         * @type Boolean
+         * @default false
          */
         fixed: {
           type: Boolean,
           reflectToAttribute: true,
-          value: function(){
-            return false;
-          }
+          value: false
         },
+
         /**
-         * To position the drawer in mini mode.
-         * The persistent navigation drawer changes its width.
-         * Its resting state is as a mini-drawer at the same elevation as the content
-         * When expanded, it appears as the standard persistent navigation drawer.
+         * Positions the drawer in mini mode if `true`. The persistent navigation
+         * drawer changes its width. Its resting state is as a mini-drawer at the
+         * same elevation as the content When expanded, it appears as the standard
+         * persistent navigation drawer.
+         *
+         * @prop mini
+         * @type Boolean
+         * @default false
          */
         mini: {
           type: Boolean,
-          reflectToAttribute: true
+          reflectToAttribute: true,
+          value: false
         },
+
         /**
-         * Enable overlay when drawer is opened. (Only when closed)
+         * Enables a dark-colored overlay over the entire page when the drawer
+         * is opened if `true`. Overlay will disappear when drawer is closed.
+         * Note that `overlay` will be overriden and the overlay effect will
+         * not appear if `persistent` property is enabled.
+         *
+         * @prop overlay
+         * @type Boolean
+         * @default true
          */
         overlay: {
           type: Boolean,
           reflectToAttribute: true,
-          value: function(){
-            return true;
-          }
+          value: true
         },
+
         /**
-         * The alignment of the drawer on the screen (`left`, `right`, `top`, `bottom`)
+         * The position the drawer should appear from on the screen. Choose one of
+         * `left`, `right`, `top`, or `bottom`.
+         *
+         * @prop align
+         * @type String
          */
         align: {
           type: String,
           reflectToAttribute: true,
           notify: true,
           observer: '_alignHandler',
-          value: function(){
-            return 'left';
-          }
+          value: 'left'
         },
+
         /**
-         * The type of drawer (`temporary`, `persistent`, `mini`)
+         * Sets the type of drawer. Choose one of `temporary`, `persistent`, or `mini`.
+         *
+         * @prop type
+         * @type String
          */
         type: {
           type: String,
-          value: function(){
-            return 'temporary';
-          },
+          value: 'temporary',
           notify: true,
           reflectToAttribute: true,
           observer: '_typeHandler'
         },
+
         /**
-        * Create an area at the edge of the screen to swipe open the drawer.
-        */
+         * Creates an area at the edge of the screen where the user can swipe
+         * to open the drawer.
+         *
+         * @prop swipeOpen
+         * @type Boolean
+         * @default true
+         */
         swipeOpen: {
           type: Boolean,
-          value: function(){
-            return true;
-          },
+          value: true,
           reflectToAttribute: true
         },
+
         /**
-         * The modifiers to apply to the element (bare, tiny, small, large, huge, etc)
+         * The style modifiers to apply to the element. Choose one of `bare`, `tiny`,
+         * `small`, `large`, `huge`, etc.
+         *
+         * @prop modifiers
+         * @type String
          */
         modifier: {
           type: String,
           notify: true,
           reflectToAttribute: true,
           observer: '_handleModifier'
+        },
+
+        /**
+         * Logs information to the browser console for debugging purposes if set
+         * to `true`. Disable this property before deploying to production.
+         *
+         * @prop debug
+         * @type String
+         */
+        debug: {
+          type: Boolean,
+          value: false
+        },
+
+        /**
+         * Private storage variables that are updated when the user touches the
+         * screen. Updates are tracked to determine if the user is trying to
+         * swipe open the menu.
+         */
+
+        /**
+         * The screen X position to start tracking user touch/swipe. (Used to
+         * handle touch/swipe.)
+         *
+         * @private
+         * @prop _startX
+         * @type Number
+         * @default 0
+         */
+        _startX: {
+          type: Number,
+          value: 0
+        },
+
+        /**
+         * The screen Y position to start tracking user touch/swipe. (Used to
+         * handle touch/swipe).
+         *
+         * @private
+         * @prop _startY
+         * @type Number
+         * @default 0
+         */
+        _startY: {
+          type: Number,
+          value: 0
+        },
+
+        /**
+         * The minimum distance the user must swipe to detect it and attempt to
+         * open the drawer. (Used to handle touch/swipe).
+         *
+         * @private
+         * @prop _threshold
+         * @type Number
+         * @default 40
+         */
+        _threshold: {
+          type: Number,
+          value: 40
+        },
+
+        /**
+         * The maximum allowed time to track the swipe before giving up. (Used to
+         * handle touch/swipe).
+         *
+         * @private
+         * @prop _allowedTime
+         * @type Number
+         * @default 400
+         */
+        _allowedTime: {
+          type: Number,
+          value: 400
+        },
+
+        /**
+         * The maximum distance to track at the same time in a perpendicular direction
+         * before giving up. (Used to handle touch/swipe).
+         *
+         * @private
+         * @prop _restraint
+         * @type Number
+         * @default 80
+         */
+        _restraint: {
+          type: Number,
+          value: 80
+        },
+
+        /**
+         * The start time of the swipe. (Used to handle touch/swipe).
+         *
+         * @private
+         * @prop _startTime
+         * @type Number
+         * @default 0
+         */
+        _startTime: {
+          type: Number,
+          value: 0
+        },
+
+        /**
+         * The direction of the swie. (Used to handle touch/swipe).
+         *
+         * @private
+         * @prop _swipeDir
+         * @type String
+         * @default null
+         */
+        _swipeDir: {
+          type: String,
+          value: null
         }
       },
+
       listeners: {
         'drawer.track': '_handleTrack',
         'overlay.tap': 'toggle',
         'drawerContent.tap': 'toggle'
       },
+
       observers: [
         'resetLayout(fixed)',
         '_updateUi(fixed, overlay, persistent)',
       ],
+
       _boundEscKeydownHandler: null,
-      ready: function () {
+
+      ready: function() {
         this.setScrollDirection('y');
       },
-      attached: function () {
-        Polymer.RenderStatus.afterNextRender(this, function () {
+
+      attached: function() {
+        Polymer.RenderStatus.afterNextRender(this, function() {
           this._init();
         });
         this._init();
       },
-      /**
-       * Handle setting up the UI with the proper classes.
-       */
-      _init: function () {
-        document.addEventListener('keydown', this._escKeydownHandler.bind(this));
-        this.debounce('resetLayout', function () {
-          this.fire('px-drawer-layout-reset');
-        }, 500);
-      },
-      detached: function () {
+
+      detached: function() {
         if (this._boundEscKeydownHandler) {
           document.removeEventListener('keydown', this._boundEscKeydownHandler);
         }
       },
-      _alignHandler: function(newVal, oldVal){
-        this.debounce('_alignHandler', function(){
-          this.toggleClass('drawer--' + oldVal, false, this.$.drawer);
-          this.toggleClass('drawer--' + newVal, true, this.$.drawer);
+
+      /**
+       * Sets up the UI with the proper classes when component attaches by calling
+       * the `resetLayout` method.
+       *
+       * Binds the ESCAPE keypress event to the `_escapeKeydownHandler` method,
+       * ensuring an opened drawer is dismissed when ESCAPE is pressed.
+       *
+       * @method _init
+       */
+      _init: function() {
+        document.addEventListener('keydown', this._escKeydownHandler.bind(this));
+        this.debounce('resetLayout', function() {
+          this.fire('px-drawer-layout-reset');
         }, 500);
       },
-      _updateUi: function(fixed, overlay, persistent){
+
+      /************************************************************************
+       * Respond to requests to change the drawer's `opened` state.
+       ************************************************************************/
+
+      /**
+       * Toggles the drawer `opened` state. Can be called externally on a drawer
+       * instance to change its state.
+       *
+       * @method toggle
+       */
+      toggle: function() {
+        if (!this.persistent) {
+          this.opened = !this.opened;
+          this.fire('px-drawer-toggle', this.opened);
+        }
+      },
+
+      /**
+       * Fires when the the drawer `toggle` method is called and the drawer state is changed.
+       *
+       * @event px-drawer-toggle
+       * @param {Boolean} opened - If `true`, drawer is now open. If `false`, drawer is now closed.
+       */
+
+      /**
+       * Opens the drawer.
+       *
+       * @method open
+       */
+      open: function() {
+        if (!this.persistent) {
+          this.opened = true;
+          this.fire('px-drawer-open', this);
+        }
+      },
+
+      /**
+       * Fires when the the drawer `open` method is called.
+       *
+       * @event px-drawer-open
+       * @param {Object} drawer - The `this` value of the drawer instance.
+       */
+
+      /**
+       * Closes the drawer.
+       *
+       * @method close
+       */
+      close: function() {
+        if (!this.persistent) {
+          this.opened = false;
+          this.fire('px-drawer-close', this);
+        }
+      },
+
+      /**
+       * Fires when the the drawer `close` method is called.
+       *
+         * @event px-drawer-close
+       * @param {Object} drawer - The `this` value of the drawer instance.
+       */
+
+      /**
+       * Attempts to dismiss the drawer when the ESCAPE key is pressed. Bound
+       * to the escape keydown event during `attached` component lifecycle.
+       *
+       * @method _escKeydownHandler
+       * @param {Event} e - The keypress event
+       */
+      _escKeydownHandler: function(e) {
+        var ESC_KEYCODE = 27;
+        if (e.keyCode === ESC_KEYCODE && !this.persistent) {
+          e.preventDefault();
+          this.close();
+        }
+      },
+
+      /**
+       * Closes the drawer when an element outside the drawer is clicked while
+       * the drawer is open.
+       *
+       * @method _handleOffClick
+       * @param {Event} e - The click event
+       */
+      _handleOffClick: function(e) {
+        if (this.opened) this.close();
+      },
+
+      /************************************************************************
+       * Handle changes to drawer properties that will impact the UI. Set classes
+       * to prepare initial UI (i.e. placement) or update UI state (i.e. opened).
+       ************************************************************************/
+
+      /**
+       * When any of the drawer configuration properties (`fixed`, `overlay`, or
+       * `persistent`) are set or changed, sets the correct classes on the drawer
+       * container to make the drawer behave as requested.
+       *
+       * @method _alignHandler
+       * @param {Boolean} fixed
+       * @param {Boolean} overlay
+       * @param {Boolean} persistent
+       */
+      _updateUi: function(fixed, overlay, persistent) {
         if (fixed) {
           this.toggleClass('drawer--fixed', true, this.$.drawer);
         } else {
@@ -312,15 +578,88 @@ Custom property | Description | Default
           this.toggleClass('drawer--persistent', true, this.$.drawer);
         }
       },
-      _startX: 0,
-      _startY: 0,
-      _dist: 0, //the distance the swipe
-      _threshold: 40, //min distance for swipe
-      _allowedTime: 400, //max time to travel
-      _restraint: 80, // maximum distance allowed at the same time in perpendicular direction
-      _startTime: 0, //the start time of the swipe
-      _swipeDir: null, //direction of the swipe
-      _handleTrack: function (e) {
+
+      /**
+       * When the `align` property is set or changed, sets the correct classes
+       * on the drawer container to place the drawer in the correct area
+       * of the screen.
+       *
+       * @method _alignHandler
+       * @param {String} newVal - The new `align` value
+       * @param {String} oldVal - The previous `align` value
+       */
+      _alignHandler: function(newVal, oldVal) {
+        this.debounce('_alignHandler', function() {
+          this.toggleClass('drawer--' + oldVal, false, this.$.drawer);
+          this.toggleClass('drawer--' + newVal, true, this.$.drawer);
+        }, 500);
+      },
+
+      /**
+       * When the `opened` property is set or changed, sets the correct classes
+       * on the drawer container to show/hide the drawer.
+       *
+       * @method _openedHandler
+       * @param {String} newVal - The new `opened` value
+       * @param {String} oldVal - The previous `opened` value
+       */
+      _openedHandler: function(newVal, oldVal) {
+        this.toggleClass('is-open', newVal, this.$.drawer);
+        this.toggleClass('is-open', newVal, this.$.overlay);
+      },
+
+      /**
+       * When the `type` property is set or changed, sets the correct classes
+       * on the drawer container.
+       *
+       * @method _typeHandler
+       * @param {String} newVal - The new `type` value
+       * @param {String} oldVal - The previous `type` value
+       */
+      _typeHandler: function(newVal, oldVal) {
+        this.toggleClass('drawer--' + oldVal, false, this.$.drawer);
+        this.toggleClass('drawer--' + newVal, true, this.$.drawer);
+      },
+
+      /**
+       * When the `modifier` property is set or changed, applies correct modifier
+       * classes to the drawer element.
+       *
+       * @method _handleModifier
+       * @param {String} newVal - The new `modifier` value
+       * @param {String} oldVal - The previous `modifier` value
+       */
+      _handleModifier: function(newVal, oldVal) {
+        var _this = this,
+          klass,
+          types;
+        klass = 'drawer--' + oldVal;
+        _this.toggleClass(klass, false, _this.$.drawer);
+        if (_this.modifier) {
+          types = _this.modifier.split(' ');
+          for (var i = 0; i < types.length; i++) {
+            klass = 'drawer--' + types[i];
+            _this.toggleClass(klass, true, _this.$.drawer);
+          }
+        }
+      },
+
+      /************************************************************************
+       * Handle user gestures (touch/swipe) and determine the user's intent.
+       * If the gesture looks like an attempt to the open the drawer, open it.
+       ************************************************************************/
+
+      /**
+       * Used to track user touch/swipe gestures. Called when the user initiates
+       * a `track` event on the drawer element. The method is continuously called
+       * during during subsequent `track` events. It delegates actions to additional
+       * methods `_handleTrackStart`, `_handleTrackMove`, and `_handleTrackEnd`
+       * to determine if the user is trying to open the drawer.
+       *
+       * @method _handleTrack
+       * @param {Event} e - A `track` event fired when the user touches the drawer
+       */
+      _handleTrack: function(e) {
         e.preventDefault();
         if(this.get('swipeOpen')){
           switch (e.detail.state) {
@@ -339,29 +678,47 @@ Custom property | Description | Default
       },
 
       /**
-       * anonymous function - description
+       * Called by `_handleTrack` when a touch/swipe on the drawer element begins.
+       * Sets or resets necessary properties that will be used by `_handleTrackMove`
+       * and `_handleTrackEnd` to determine if the user is trying to open the drawer.
        *
-       * @param  {type} e description
-       * @return {type}   description
+       * @method _handleTrackStart
+       * @param {Event} e - A `track` event fired when the user touches the drawer
        */
-      _handleTrackStart: function (e) {
+      _handleTrackStart: function(e) {
         e.preventDefault();
         var touchobj = e.detail;
         this._swipeDir = 'none';
         this._startX = touchobj.sourceEvent.pageX,
         this._startY = touchobj.sourceEvent.pageY;
         this._startTime = new Date().getTime();
-        this._dist = 0;
       },
-      _handleTrackMove: function (e) {
-        console.log('_handleTrackMove', e);
-      },
+
       /**
-       * This method runs when tracking has ended
-       * and returns the direction the swipe was.
+       * Called by `_handleTrack` when a touch/swipe on the drawer continues.
+       * If the `debug` property is enabled, the track event is logged to the
+       * console for inspection.
+       *
+       * @method _handleTrackMove
+       * @param {Event} e - A `track` event fired when the user touches the drawer
        */
-      _handleTrackEnd: function (e) {
+      _handleTrackMove: function(e) {
+        if (this.debug) console.log('_handleTrackMove', e);
+      },
+
+      /**
+      * Called by `_handleTrack` when a touch/swipe on the drawer ends. Calculates
+      * the direction of the touch/swipe event (`left`, `right`, `up`, `down`).
+      * If the swipe event happened within the allowed time (set in `_allowedTime`),
+      * calls the `_handleTrackComplete` method with the direction of the swipe.
+      *
+      * @method _handleTrackEnd
+      * @param {Event} e - A `track` event fired when the user touches the drawer
+      */
+      _handleTrackEnd: function(e) {
         e.preventDefault();
+
+        // Prepare variables
         var swipedir = null;
         var touchobj = e.detail.sourceEvent;
         var allowedTime = this._allowedTime;
@@ -370,175 +727,89 @@ Custom property | Description | Default
         var restraint = this._restraint;
         var startTime = this._startTime;
         var threshold = this._threshold;
-        var distX = touchobj.pageX - startX; // get horizontal dist traveled by finger while in contact with surface
-        var distY = touchobj.pageY - startY; // get vertical dist traveled by finger while in contact with surface
+        // Get horizontal dist traveled by finger while in contact with surface
+        var distX = touchobj.pageX - startX;
+        // Get vertical dist traveled by finger while in contact with surface
+        var distY = touchobj.pageY - startY;
+        // Calculate time since swipe event started
         var elapsedTime = new Date().getTime() - startTime;
+
+        // If the swipe event happened within the allowed time, attempt to calculate
+        // the direction of the swipe
         if (elapsedTime <= allowedTime) {
-          if (Math.abs(distX) >= threshold && Math.abs(distY) <= restraint) { // 2nd condition for horizontal swipe met
+
+          // Determine if the swipe was longer than the threshold but shorter than the restraint
+          if (Math.abs(distX) >= threshold && Math.abs(distY) <= restraint) {
             swipedir = (distX < 0)
-              ? 'left'
-              : 'right' // if dist traveled is negative, it indicates left swipe
-          } else if (Math.abs(distY) >= threshold && Math.abs(distX) <= restraint) { // 2nd condition for vertical swipe met
+              ? 'left' : 'right' // if dist traveled is negative, it indicates left swipe
+          }
+
+          // Determine if the swipe was longer than the threshold but shorter than the restraint
+          else if (Math.abs(distY) >= threshold && Math.abs(distX) <= restraint) {
             swipedir = (distY < 0)
-              ? 'up'
-              : 'down' // if dist traveled is negative, it indicates up swipe
+              ? 'up' : 'down' // if dist traveled is negative, it indicates up swipe
           }
+
+          // If a swipedir was calculated, call method to handle it
+          if (swipedir) this._handleTrackComplete(swipedir);
         }
-        this._handleTrackComplete(swipedir);
-      },
-      /**
-       * Handle when tracking is complete.
-       */
-      _handleTrackComplete: function (swipedir) {
-        switch (swipedir) {
-          case 'up':
-            if (this.align === 'bottom') {
-              this.toggle();
-            }
-            break;
-          case 'down':
-            if (this.align === 'bottom') {
-              this.toggle();
-            }
-            break;
-          case 'left':
-            if (this.align === 'left') {
-              this.toggle();
-            }
-            break;
-          case 'right':
-            this.toggle();
-            break;
-        }
-      },
-      /**
-        * Handle toggling the drawer open or close.
-        * @event px-drawer-toggle
-        */
-      toggle: function (type) {
-        if (!this.persistent) {
-          this.opened = !this.opened;
-          this.fire('px-drawer-toggle', this.opened);
-        }
-      },
-      /**
-       * Handle when a click is outside the drawer.
-       */
-      _handleOffClick: function (e) {
-        if (this.opened) {
-          this.close();
-        }
-      },
-      /**
-       * Handle when the drawer opened state is changed.
-       */
-      _openHandler: function (newVal, oldVal) {
-        this.toggleClass('is-open', newVal, this.$.drawer);
-        this.toggleClass('is-open', newVal, this.$.overlay);
-      },
-      /**
-       * Handle when the drawer type is changed.
-       */
-      _typeHandler: function (newVal, oldVal) {
-        this.toggleClass('drawer--' + oldVal, false, this.$.drawer);
-        this.toggleClass('drawer--' + newVal, true, this.$.drawer);
-      },
-      /**
-       * Handle when the modifier changes.
-       */
-      _handleModifier: function (newVal, oldVal) {
-        var _this = this,
-          klass,
-          types;
-        klass = 'drawer--' + oldVal;
-        _this.toggleClass(klass, false, _this.$.drawer);
-        if (_this.modifier) {
-          types = _this.modifier.split(' ');
-          for (var i = 0; i < types.length; i++) {
-            klass = 'drawer--' + types[i];
-            _this.toggleClass(klass, true, _this.$.drawer);
-          }
-        }
-      },
-      /**
-       * Gets the width of the drawer.
-       *
-       * @return {Number} The width of the drawer in pixels.
-       */
-      getWidth: function () {
-        return this.$.drawerContent.offsetWidth;
-      },
-      /**
-       * Opens the drawer.
-       * @event px-drawer-open
-       */
-      open: function () {
-        if (!this.persistent) {
-          this.opened = true;
-          this.fire('px-drawer-open', this);
-        }
-      },
-      /**
-       * Closes the drawer.
-       * @event px-drawer-close
-       */
-      close: function () {
-        if (!this.persistent) {
-          this.opened = false;
-          this.fire('px-drawer-close', this);
-        }
-      },
-      /**
-       * Handle when the esc key is pressed.
-       */
-      _escKeydownHandler: function (event) {
-        var ESC_KEYCODE = 27;
-        if (event.keyCode === ESC_KEYCODE && !this.persistent) {
-          event.preventDefault();
-          this.close();
-        }
-      },
-      /**
-       * Resets the layout. If you changed the size of app-header via CSS
-       * you can notify the changes by either firing the `iron-resize` event
-       * or calling `resetLayout` directly.
-       *
-       * @method resetLayout
-       */
-      /**
-        * Fired when drawer is reset
-        * @event px-drawer-layout-reset
-        */
-      resetLayout: function () {
-        this.debounce('_resetLayout', function () {
-          this.fire('px-drawer-reset-layout', this);
-        }, 1);
       },
 
       /**
-       * Handle moving the drawer
-       * @param translateX
-       * @private
-       */
-      _moveDrawer: function (translateX) {
-        var _content = this.$.drawer;
-        this.transform(this._transformForTranslateX(translateX), _content);
-        this.toggleClass('is-open', this.opened, _content);
-        this.toggleClass('transition', this._transition, _content);
-        this.toggleClass('dragging', this._dragging, _content);
+      * Called by `_handleTrackEnd` after a touch/swipe on the drawer ends with
+      * the direction of the swipe. Checks if this swipe matches the directions
+      * we expect based on the drawer's `align` position.
+      *
+      * Triggers an open event when the following swipe direction and `align`
+      * properties match up:
+      * - `swipedir` up / `align` bottom
+      * - `swipedir` down / `align` bottom
+      * - `swipedir` ANY / `align` right
+      *
+      * @method _handleTrackComplete
+      * @param {Event} e - A `track` event fired when the user touches the drawer
+      */
+      _handleTrackComplete: function(swipedir) {
+        if (swipedir === 'up' && this.align === 'bottom') return this.toggle();
+        if (swipedir === 'down' && this.align === 'bottom') return this.toggle();
+        if (swipedir === 'left' && this.align === 'left') return this.toggle();
+        if (swipedir === 'right') return this.toggle();
       },
+
+      /************************************************************************
+       * Respond with details about the drawer's layout state. Handle requests to
+       * reset the drawer's layout and position.
+       ************************************************************************/
+
       /**
-       * Handle transforming the element.
-       * @param translateX
-       * @returns {*}
-       * @private
+       * Gets the current width of the drawer.
+       *
+       * @return {Number} The width of the drawer in pixels.
        */
-      _transformForTranslateX: function (translateX) {
-        if (translateX === null) {
-          return 'translate3d(0, 0, 0)';
-        }
-        return 'translate3d(' + translateX + 'px, 0, 0)';
+      getWidth: function() {
+        return this.$.drawerContent.offsetWidth;
+      },
+
+      /**
+       * Resets the drawer's layout when the `fixed` property is set or changed.
+       * If the size of the drawer's container or children are changed externally
+       * via CSS, you can ensure the changes are reflected by firing an `iron-resize`
+       * event or calling the `resetLayout` method directly on the drawer instance.
+       *
+       * @method resetLayout
+       */
+      resetLayout: function() {
+        this.debounce('_resetLayout', function() {
+          this.fire('px-drawer-reset-layout', this);
+        }, 1);
       }
+
+      /**
+       * Fired when drawer layout is reset.
+       *
+       * @event px-drawer-layout-reset
+       * @param {Object} drawer - The `this` value of the drawer instance.
+       */
     });
   </script>
 </dom-module>
