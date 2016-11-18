@@ -1,6 +1,6 @@
 {
   "name": "px-drawer",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "A responsive mobile first web component for hiding content off screen.",
   "authors": [
     "General Electric",
@@ -39,25 +39,21 @@
   "dependencies": {
     "polymer": "^1.6.1",
     "iron-resizable-behavior": "^1.0.5",
-    "iron-fit-behavior": "^1.2.5",
-    "px-layout": "~0.0.3",
-    "px-navbar": "https://github.com/PredixDev/px-navbar.git"
+    "iron-fit-behavior": "^1.2.5"
   },
   "devDependencies": {
-    "px-headings-design": "^0.2.23",
     "px-toggle-design": "^0.2.21",
     "px-list-inline-design": "^0.2.18",
     "iron-demo-helpers": "^1.2.3",
     "px-colors-design": "^0.2.16",
     "px-spacing-responsive-design": "^0.3.7",
-    "iron-component-page": "^1.1.7",
     "px-demo-snippet": "^0.6.10",
     "px-api-viewer": "^0.1.0",
-    "px-demo-template": "https://github.com/jonniespratley/px-demo-template.git",
-    "px-mobile-design": "https://github.com/PredixDev/px-mobile-design.git",
-    "px-spacing-design": "https://github.com/PredixDev/px-spacing-design.git",
-    "px-table-view": "https://github.com/PredixDev/px-table-view.git",
+    "px-spacing-design": "^0.3.17",
     "px-tabs": "^0.5.7",
-    "polymer-font-awesome": "px-polymer-font-awesome#^0.1.9"
+    "polymer-font-awesome": "px-polymer-font-awesome#^0.1.9",
+    "px-mobile-design": "^0.1.1",
+    "px-headings-design": "^0.2.23",
+    "px-forms-design": "^0.3.27"
   }
 }

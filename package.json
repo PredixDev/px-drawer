@@ -5,7 +5,7 @@
     "Jonnie Spratley"
   ],
   "description": "A responsive mobile first web component for hiding content off screen.",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "private": true,
   "repository": {
     "type": "git",
