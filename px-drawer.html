@@ -56,96 +56,7 @@ Custom property | Description | Default
 <dom-module id="px-drawer">
   <template strip-whitespace>
     <style include="px-drawer-styles">
-      :host {
-        display: block;
-      }
-
-      :host .drawer {
-        z-index: 20;
-        background-color: var(--px-drawer-background-color, #242326);
-        width: var(--px-drawer-width, 256px);
-        height: var(--px-drawer-height, 100%);
-        @apply(--px-drawer);
-      }
-      :host .drawer--static {
-        height: 100vh;
-      }
-      :host([mini]) .drawer__content ::content {
-        --px-table-view-title: {
-          display: none;
-        }
-      }
-
-      :host([mini]) .drawer,
-      :host([mini][persistent]) .drawer {
-        width: var(--px-drawer-mini-width, 50px);
-      }
-      :host([mini][opened]) .drawer {
-        width: var(--px-drawer-mini-width-opened, auto);
-      }
-
-      :host ::content .drawer__spacer {
-        min-height: 56px;
-      }
-
-      :host .drawer__content {
-        overflow-x: hidden;
-        @apply(--px-drawer-content);
-      }
-
-      :host([swipe-open]) > .drawer::after {
-        position: fixed;
-        top: 56px;
-        bottom: 0;
-        left: 100%;
-        visibility: visible;
-        width: 20px;
-        content: '';
-      }
-
-      :host .drawer__overlay {
-        position: fixed;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        transition: opacity 0.2s ease;
-        -webkit-transition: opacity 0.2s ease;
-        -webkit-transform: translateZ(0);
-        transform: translateZ(0);
-        opacity: 0;
-        z-index: -1;
-        visibility: hidden;
-        display: none;
-        background: var(--px-drawer-overlay-background, rgba(0, 0, 0, 0.5));
-        @apply(--px-drawer-overlay);
-      }
-
-      :host([opened][persistent]){
-        min-height: 100vh;
-      }
-
-      :host([opened]) .drawer {
-        visibility: visible;
-        transform: translate3d(0,0,0);
-        -webkit-transform: translate3d(0,0,0);
-        @apply(--px-drawer-opened);
-      }
-
-      :host([opened][overlay]) > .drawer__overlay,
-      :host([opened=true][overlay=true]) > .drawer__overlay {
-        opacity: 1;
-        z-index: 15;
-        visibility: visible;
-        display: block;
-      }
-
-      :host([opened][persistent]) > .drawer__overlay {
-        visibility: hidden;
-        display: none;
-        pointer-events: none;
-        opacity: 0;
-      }
+      
     </style>
     <div id="overlay" class="drawer__overlay" on-tap="toggle" hidden$="{{!overlay}}"></div>
     <div id="drawer" class="drawer">
@@ -474,7 +385,7 @@ Custom property | Description | Default
        */
       toggle: function() {
         if (!this.persistent) {
-          this.opened = !this.opened;
+          this.set("opened",!this.opened);
           this.fire('px-drawer-toggle', this.opened);
         }
       },
@@ -493,7 +404,7 @@ Custom property | Description | Default
        */
       open: function() {
         if (!this.persistent) {
-          this.opened = true;
+          this.set("opened",true);
           this.fire('px-drawer-open', this);
         }
       },
@@ -512,7 +423,7 @@ Custom property | Description | Default
        */
       close: function() {
         if (!this.persistent) {
-          this.opened = false;
+          this.set('opened',false);
           this.fire('px-drawer-close', this);
         }
       },
@@ -629,8 +540,9 @@ Custom property | Description | Default
        */
       _handleModifier: function(newVal, oldVal) {
         var _this = this,
-          klass,
-          types;
+            klass,
+            types;
+
         klass = 'drawer--' + oldVal;
         _this.toggleClass(klass, false, _this.$.drawer);
         if (_this.modifier) {
@@ -686,10 +598,10 @@ Custom property | Description | Default
       _handleTrackStart: function(e) {
         e.preventDefault();
         var touchobj = e.detail;
-        this._swipeDir = 'none';
-        this._startX = touchobj.sourceEvent.pageX,
-        this._startY = touchobj.sourceEvent.pageY;
-        this._startTime = new Date().getTime();
+        this.set('_swipeDir','none');
+        this.set('_startX', touchobj.sourceEvent.pageX);
+        this.set('_startY', touchobj.sourceEvent.pageY);
+        this.set('_startTime', new Date().getTime());
       },
 
       /**
@@ -717,20 +629,20 @@ Custom property | Description | Default
         e.preventDefault();
 
         // Prepare variables
-        var swipedir = null;
-        var touchobj = e.detail.sourceEvent;
-        var allowedTime = this._allowedTime;
-        var startY = this._startY;
-        var startX = this._startX;
-        var restraint = this._restraint;
-        var startTime = this._startTime;
-        var threshold = this._threshold;
-        // Get horizontal dist traveled by finger while in contact with surface
-        var distX = touchobj.pageX - startX;
-        // Get vertical dist traveled by finger while in contact with surface
-        var distY = touchobj.pageY - startY;
-        // Calculate time since swipe event started
-        var elapsedTime = new Date().getTime() - startTime;
+        var swipedir = null,
+            touchobj = e.detail.sourceEvent,
+            allowedTime = this._allowedTime,
+            startY = this._startY,
+            startX = this._startX,
+            restraint = this._restraint,
+            startTime = this._startTime,
+            threshold = this._threshold,
+            // Get horizontal dist traveled by finger while in contact with surface
+            distX = touchobj.pageX - startX,
+            // Get vertical dist traveled by finger while in contact with surface
+            distY = touchobj.pageY - startY,
+            // Calculate time since swipe event started
+            elapsedTime = new Date().getTime() - startTime;
 
         // If the swipe event happened within the allowed time, attempt to calculate
         // the direction of the swipe
@@ -738,14 +650,12 @@ Custom property | Description | Default
 
           // Determine if the swipe was longer than the threshold but shorter than the restraint
           if (Math.abs(distX) >= threshold && Math.abs(distY) <= restraint) {
-            swipedir = (distX < 0)
-              ? 'left' : 'right' // if dist traveled is negative, it indicates left swipe
+            swipedir = (distX < 0) ? 'left' : 'right'; // if dist traveled is negative, it indicates left swipe
           }
 
           // Determine if the swipe was longer than the threshold but shorter than the restraint
           else if (Math.abs(distY) >= threshold && Math.abs(distX) <= restraint) {
-            swipedir = (distY < 0)
-              ? 'up' : 'down' // if dist traveled is negative, it indicates up swipe
+            swipedir = (distY < 0) ? 'up' : 'down'; // if dist traveled is negative, it indicates up swipe
           }
 
           // If a swipedir was calculated, call method to handle it

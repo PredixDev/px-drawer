@@ -27,6 +27,97 @@ $inuit-enable-margins: true;
 @import "variables";
 @import "px-mobile-design/sass/_mixins.scss";
 
+:host {
+  display: block;
+}
+
+:host .drawer {
+  z-index: 20;
+  background-color: var(--px-drawer-background-color, #242326);
+  width: var(--px-drawer-width, 256px);
+  height: var(--px-drawer-height, 100%);
+  @apply(--px-drawer);
+}
+:host .drawer--static {
+  height: 100vh;
+}
+:host([mini]) .drawer__content ::content {
+  --px-table-view-title: {
+    display: none;
+  }
+}
+
+:host([mini]) .drawer,
+:host([mini][persistent]) .drawer {
+  width: var(--px-drawer-mini-width, 50px);
+}
+:host([mini][opened]) .drawer {
+  width: var(--px-drawer-mini-width-opened, auto);
+}
+
+:host ::content .drawer__spacer {
+  min-height: 56px;
+}
+
+:host .drawer__content {
+  overflow-x: hidden;
+  @apply(--px-drawer-content);
+}
+
+:host([swipe-open]) > .drawer::after {
+  position: fixed;
+  top: 56px;
+  bottom: 0;
+  left: 100%;
+  visibility: visible;
+  width: 20px;
+  content: '';
+}
+
+:host .drawer__overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  transition: opacity 0.2s ease;
+  -webkit-transition: opacity 0.2s ease;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  opacity: 0;
+  z-index: -1;
+  visibility: hidden;
+  display: none;
+  background: var(--px-drawer-overlay-background, rgba(0, 0, 0, 0.5));
+  @apply(--px-drawer-overlay);
+}
+
+:host([opened][persistent]){
+  min-height: 100vh;
+}
+
+:host([opened]) .drawer {
+  visibility: visible;
+  transform: translate3d(0,0,0);
+  -webkit-transform: translate3d(0,0,0);
+  @apply(--px-drawer-opened);
+}
+
+:host([opened][overlay]) > .drawer__overlay,
+:host([opened=true][overlay=true]) > .drawer__overlay {
+  opacity: 1;
+  z-index: 15;
+  visibility: visible;
+  display: block;
+}
+
+:host([opened][persistent]) > .drawer__overlay {
+  visibility: hidden;
+  display: none;
+  pointer-events: none;
+  opacity: 0;
+}
+
 .drawer {
   //z-index   : 210;
   @include transform(translate3d(0, 0, 0));
