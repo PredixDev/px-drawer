@@ -1,141 +1,198 @@
+<!doctype html>
 <html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>px-drawer Demo</title>
+  <link rel="stylesheet" type="text/css" href="css/px-drawer-demo.css"/>
 
-	<head>
-		<meta name="viewport" content="initial-scale=1, maximum-scale=1">
-		<meta name="apple-mobile-web-app-capable" content="yes">
-		<meta name="apple-mobile-web-app-status-bar-style" content="black">
-		<title>px-drawer</title>
-		<script src="../webcomponentsjs/webcomponents-lite.min.js"></script>
-		<link rel="import" href="../iron-icon/iron-icon.html">
-		<link rel="import" href="../iron-input/iron-input.html">
-		<link rel="import" href="../px-demo-template/px-demo-template.html">
-		<link rel="import" href="px-drawer.html">
+  <!-- Import custom element. Note: see comment about relative paths to dependencies in the *.html file referenced below -->
+  <script src="../webcomponentsjs/webcomponents-lite.min.js"></script>
 
-		<style media="screen">
+  <link rel="import" href="../px-theme/px-theme-styles.html">
+  <style include="px-theme-styles" is="custom-style"></style>
 
-			body{
-				margin: 0;
-			}
+  <link rel="import" href="../px-api-viewer/px-api-viewer.html" />
+  <link rel="import" href="../px-tabs/px-tab-set.html" />
+  <link rel="import" href="../px-demo-snippet/px-demo-snippet.html">
+  <link rel="import" href="../px-polymer-font-awesome/polymer-font-awesome.html" />
 
-      .bg--dark{
-        background: #333;
-      }
-      .position-relative{
-        overflow: hidden;
-        position: relative;
-        height: 100%;
-        width: 100%;
-        min-height: 300px;
-        border: 10px solid black;
-      }
+  <link rel="import" href="px-drawer.html">
 
-		</style>
-	</head>
+  <style media="screen">
+    .bg--dark {
+      background: #333;
+    }
+    .position-relative {
+      overflow: hidden;
+      position: relative;
+      height: 100%;
+      width: 100%;
+      min-height: 300px;
+      border: 10px solid black;
+    }
+  </style>
+</head>
+<body unresolved>
+  <template id="just-for-demo" is="dom-bind">
 
-	<body unresolved>
+    <!-- DESCRIPTION -->
+    <div class="hero u-p++ text--shadow">
+      <a class="actionable flex flex--right flex--middle" href="https://github.com/PredixDev/px-drawer" target="_blank"><iron-icon class="menu__open" icon="fa:fa-github"></iron-icon>View on Github</a>
+      <h1 class="delta">px-drawer</h1>
+      <div class="description-text">
+        <p>The px-drawer is a navigation drawer that can slide in from the left, right, top or bottom.</p>
+      </div>
+      <div class="flex">
+        <img class="u-mr--" src="https://img.shields.io/travis/PredixDev/px-drawer.svg?style=flat-square" alt="Travis"/>
+        <img class="u-mr--" src="https://img.shields.io/bower/v/px-drawer.svg?style=flat-square" alt="Bower"/>
+        <img class="u-mr--" src="https://img.shields.io/github/issues-raw/PredixDev/px-drawer.svg?style=flat-square" alt="Issues"/>
+      </div>
+    </div>
+    <!-- END DESCRIPTION -->
 
-		<template id="scope" is="dom-bind">
 
-			<style is="custom-style" include="px-demo-template-css">
-				ul, li{
-					list-style-type: none;
-					padding: 0;
-					margin: 0;
-				}
-			</style>
+    <!-- DEMO + API -->
+    <div style="position: relative;" class="u-pb++ flex flex--col" id="defaultTab">
 
-			<px-demo-template id="test"
-				repo-name="px-drawer"
-				element-name="px-drawer"
-				heading="px-drawer"
-				description="The px-drawer is a navigation drawer that can slide in from the left, right, top or bottom."
-				element-props="{{props}}">
+      <!-- Tab Container -->
+      <div class="tabContainer u-pt++ u-pl++">
+        <px-tab-set selected="{{selected}}" bare no-bottom-border>
+          <template is="dom-repeat" items="{{optionsArray}}">
+            <px-tab>Option {{indexPlusOne(index)}}</px-tab>
+          </template>
+        </px-tab-set>
+      </div>
 
-				<div properties>
-					<ul>
+      <!-- For each tab, loop over and create a demo box  -->
+      <px-tab-pages selected="{{selected}}">
+        <template is="dom-repeat" items="{{optionsArray}}">
+          <section class="tab-page">
 
-            <li class="u-mb-">
-              <div class="flex u-mb-">
-                <input id="opened" class="toggle__input toggle__input--small" type="checkbox" checked="{{props.opened::change}}">
-                <label for="opened" class="toggle__label toggle__label--small"></label>
-                <div class="u-ml-">Opened</div>
+            <!-- Demo Box -->
+            <div class="mega-demo flex u-ph++ u-pb++">
+
+              <!-- Demo Box: Set Properties -->
+              <div class="properties u-ph+ u-pb+ u-mt+">
+                <p class="epsilon">Properties</p>
+                <div class="flex u-mb-">
+                  <input id="opened{{indexPlusOne(index)}}" class="toggle__input toggle__input--small" type="checkbox" checked="{{item.opened::change}}">
+                  <label for$="opened{{indexPlusOne(index)}}" class="toggle__label toggle__label--small"></label>
+                  <div class="u-ml-">Opened</div>
+                </div>
+                <div class="flex u-mb-">
+                  <input id="persistent{{indexPlusOne(index)}}" class="toggle__input toggle__input--small" type="checkbox" checked="{{item.persistent::change}}">
+                  <label for$="persistent{{indexPlusOne(index)}}" class="toggle__label toggle__label--small"></label>
+                  <div class="u-ml-">Persistent</div>
+                </div>
+                <div class="flex u-mb-">
+                  <input id="overlay{{indexPlusOne(index)}}" class="toggle__input toggle__input--small" type="checkbox" checked="{{item.overlay::change}}">
+                  <label for$="overlay{{indexPlusOne(index)}}" class="toggle__label toggle__label--small"></label>
+                  <div class="u-ml-">Overlay</div>
+                </div>
+                <div class="flex u-mb-">
+                  <input id="fixed{{indexPlusOne(index)}}" class="toggle__input toggle__input--small" type="checkbox" checked="{{item.fixed::change}}">
+                  <label for$="fixed{{indexPlusOne(index)}}" class="toggle__label toggle__label--small"></label>
+                  <div class="u-ml-">Fixed</div>
+                </div>
+                <div class="flex u-mb-">
+                  <input id="swipeOpen{{indexPlusOne(index)}}" class="toggle__input toggle__input--small" type="checkbox" checked="{{item.swipeOpen::change}}">
+                  <label for$="swipeOpen{{indexPlusOne(index)}}" class="toggle__label toggle__label--small"></label>
+                  <div class="u-ml-">Swipe open</div>
+                </div>
               </div>
+              <!-- end Demo Box: Set Properties -->
+
+              <!-- Demo Box: Show Demos -->
+              <div class="demoContainer u-mt+">
+                <div class="flex flex--col">
+                  <div class="demo u-p+">
+                    <div class="position-relative">
+                      <px-drawer
+                          id="drawer1"
+                          overlay="{{item.overlay}}"
+                          swipe-open="{{item.swipeOpen}}"
+                          opened="{{item.opened}}"
+                          fixed="{{item.fixed}}">
+                        <p class="u-m">This is content inside of the drawer</p>
+                      </px-drawer>
+                    </div>
+                  </div>
+                  <div>
+                    <px-demo-snippet
+                        element-properties={{item}}
+                        element-name="px-drawer">
+                    </px-demo-snippet>
+                  </div>
+                </div>
+              </div>
+              <!-- end Demo Box: Show Demos -->
+
+            </div>
+            <!-- end Demo Box -->
+
+            <!-- API Container -->
+            <div class="apiContainer">
+              <div class="flex flex--col api u-mt++" >
+                <px-api-viewer source="px-drawer"></px-api-viewer>
+              </div>
+            </div>
+            <!-- end API Container -->
+
+          </section>
+        </template>
+      </px-tab-pages>
+    </div>
+    <!-- END DEMO + API -->
+
+    <!-- FOOTER -->
+    <footer class="footer flex flex--center">
+      <div class="footer__container u-pv++">
+        <div>
+          <a href="https://ge.com/digital" >
+            <img src="monogram-wdmk.png" alt="GE Monogram" class="footer__img">
+          </a>
+        </div>
+        <div class="footer__list">
+          <ul class="list-inline list-inline--delimited">
+            <li>
+              <a href="http://predix.io/legal" class="footer__list--lnk">Legal</a>
             </li>
-            <li class="u-mb-">
-              <div class="flex u-mb-">
-                <input id="overlay" class="toggle__input toggle__input--small" type="checkbox" checked="{{props.overlay::change}}">
-                <label for="overlay" class="toggle__label toggle__label--small"></label>
-                <div class="u-ml-">Overlay</div>
-              </div>
+            <li>
+              <a href="mailto:info@predix.io" class="footer__list--lnk">Contact Us</a>
             </li>
-            <!--
-            <li class="u-mb-">
-              <div class="flex u-mb-">
-                <input id="mini" class="toggle__input toggle__input--small" type="checkbox" checked="{{props.mini::change}}">
-                <label for="mini" class="toggle__label toggle__label--small"></label>
-                <div class="u-ml-">Mini</div>
-              </div>
-            </li>-->
-            <li class="u-mb-">
-              <div class="flex u-mb-">
-                <input id="persistent" class="toggle__input toggle__input--small" type="checkbox" checked="{{props.persistent::change}}">
-                <label for="persistent" class="toggle__label toggle__label--small"></label>
-                <div class="u-ml-">Persistent</div>
-              </div>
-            </li>
-            <li class="u-mb-">
-              <div class="flex u-mb-">
-                <input id="fixed" class="toggle__input toggle__input--small" type="checkbox" checked="{{props.fixed::change}}">
-                <label for="fixed" class="toggle__label toggle__label--small"></label>
-                <div class="u-ml-">Fixed</div>
-              </div>
-            </li>
-            <li class="u-mb-">
-              <div class="flex u-mb-">
-                <input id="swipeOpen" class="toggle__input toggle__input--small" type="checkbox" checked="{{props.swipeOpen::change}}">
-                <label for="swipeOpen" class="toggle__label toggle__label--small"></label>
-                <div class="u-ml-">Swipe Open</div>
-              </div>
-            </li>
-            <!--
-            <li class="u-mb-">
-              <div class="u-mb-">
-								<label class="u-mb-">Align</label>
-                <input is="iron-input" id="align" class="text-input" type="text" bind-value="{{props.align}}">
+            <li>Copyright &copy; 2016 General Electric Company. All rights reserved.</li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+    <!-- END FOOTER -->
+  </template>
 
-              </div>
-            </li>
-          -->
-					</ul>
-				</div>
+  <!-- DEMO SCRIPTS -->
+  <script>
+    window.addEventListener('WebComponentsReady', function() {
+      var template = document.querySelector('template[is=dom-bind]'),
+      optionsArray = [
+        {
+          opened: false,
+          persistent: false,
+          overlay: true,
+          fixed: false,
+          swipeOpen: true
+        }
+      ],
+      indexPlusOne = function(num) {
+        return num + 1;
+      };
 
-				<div demo>
-					<div class="position-relative">
-            <px-drawer id="drawer1"
-              overlay="{{props.overlay}}"
-              swipe-open="{{props.swipeOpen}}"
-              opened="{{props.opened}}"
-              fixed="{{props.fixed}}">
-              <p class="u-m">
-                This is content inside of the drawer
-              </p>
-            </px-drawer>
-					</div>
-				</div>
-
-			</px-demo-template>
-		</template>
-		<script type="text/javascript">
-			document.addEventListener('WebComponentsReady', function() {
-				var scope = document.querySelector('#scope');
-				scope.props = {
-					opened: false,
-					persistent: false,
-					overlay: false,
-					fixed: false,
-					swipeOpen: true
-				};
-			});
-		</script>
-	</body>
+      template.selected = "0";
+      template.optionsArray = optionsArray;
+      template.indexPlusOne = indexPlusOne;
+    });
+  </script>
+  <!-- END DEMO SCRIPTS -->
+</body>
 </html>

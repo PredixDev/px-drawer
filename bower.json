@@ -1,53 +1,63 @@
 {
   "name": "px-drawer",
   "version": "0.0.1",
+  "description": "A responsive mobile first web component for hiding content off screen.",
   "authors": [
+    "General Electric",
     "Jonnie Spratley <jonnie.spratley@ge.com>"
   ],
-  "description": "A responsive mobile first web component for hiding content off screen.",
+  "main": [
+    "px-drawer.html"
+  ],
+  "ignore": [
+    ".*",
+    "npm-debug.log",
+    "gulpfile.js",
+    "sass",
+    "bower_components",
+    "node_modules",
+    "test",
+    "OSS_Notice.pdf",
+    "scripts",
+    ".github",
+    "<%=name %>.png",
+    "LICENSE.md",
+    "CONTRIBUTING.md",
+    "HISTORY.md",
+    "README.md",
+    ".jshintrc",
+    ".editorconfig"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/PredixDev/px-drawer.git"
   },
-  "main": "px-drawer.html",
   "keywords": [
     "px",
     "px-mobile"
   ],
-  "license": "MIT",
-  "ignore": [
-    "**/.*",
-    "node_modules",
-    "bower_components",
-    "test",
-    "tests"
-  ],
   "dependencies": {
-    "polymer": "~1.5.0",
-    "px-navbar": "https://github.com/PredixDev/px-navbar.git",
-    "iron-resizable-behavior": "PolymerElements/iron-resizable-behavior#~1.0.3",
-    "iron-fit-behavior": "PolymerElements/iron-fit-behavior#~1.2.3",
-    "px-layout": "~0.0.3"
+    "polymer": "^1.6.1",
+    "iron-resizable-behavior": "^1.0.5",
+    "iron-fit-behavior": "^1.2.5",
+    "px-layout": "~0.0.3",
+    "px-navbar": "https://github.com/PredixDev/px-navbar.git"
   },
   "devDependencies": {
-    "px-mobile-design": "https://github.com/PredixDev/px-mobile-design.git",
-    "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^1.2.3",
-    "px-spacing-design": "https://github.com/PredixDev/px-spacing-design.git",
-    "px-table-view": "https://github.com/PredixDev/px-table-view.git",
+    "px-headings-design": "^0.2.23",
+    "px-toggle-design": "^0.2.21",
+    "px-list-inline-design": "^0.2.18",
+    "iron-demo-helpers": "^1.2.3",
     "px-colors-design": "^0.2.16",
     "px-spacing-responsive-design": "^0.3.7",
-    "iron-component-page": "~1.1.7",
+    "iron-component-page": "^1.1.7",
+    "px-demo-snippet": "^0.6.10",
+    "px-api-viewer": "^0.1.0",
     "px-demo-template": "https://github.com/jonniespratley/px-demo-template.git",
-    "px-demo-snippet": "^0.6.4",
-    "px-api-viewer": "^0.1.0"
-  },
-  "resolutions": {
-    "polymer": "~v1.5.0",
-    "px-theme": "^1.1.2",
-    "polymer-font-awesome": "master",
-    "px-typography-design": "^1.1.0",
-    "px-defaults-design": "~0.3.5",
-    "px-iconography-design": "^0.3.1",
-    "px-functions-design": "~1.0.0"
+    "px-mobile-design": "https://github.com/PredixDev/px-mobile-design.git",
+    "px-spacing-design": "https://github.com/PredixDev/px-spacing-design.git",
+    "px-table-view": "https://github.com/PredixDev/px-table-view.git",
+    "px-tabs": "^0.5.7",
+    "polymer-font-awesome": "px-polymer-font-awesome#^0.1.9"
   }
 }
