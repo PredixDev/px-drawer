@@ -102,6 +102,11 @@
                   <label for$="swipeOpen{{indexPlusOne(index)}}" class="toggle__label toggle__label--small"></label>
                   <div class="u-ml-">Swipe open</div>
                 </div>
+                <div class="flex u-mb-">
+                  <input id="debug{{indexPlusOne(index)}}" class="toggle__input toggle__input--small" type="checkbox" checked="{{item.debug::change}}">
+                  <label for$="debug{{indexPlusOne(index)}}" class="toggle__label toggle__label--small"></label>
+                  <div class="u-ml-">Debug</div>
+                </div>
               </div>
               <!-- end Demo Box: Set Properties -->
 
@@ -112,10 +117,12 @@
                     <div class="position-relative">
                       <px-drawer
                           id="drawer1"
-                          overlay="{{item.overlay}}"
-                          swipe-open="{{item.swipeOpen}}"
                           opened="{{item.opened}}"
-                          fixed="{{item.fixed}}">
+                          persistent="{{item.persistent}}"
+                          overlay="{{item.overlay}}"
+                          fixed="{{item.fixed}}"
+                          swipe-open="{{item.swipeOpen}}"
+                          debug={{item.debug}}>
                         <p class="u-m">This is content inside of the drawer</p>
                       </px-drawer>
                     </div>
@@ -181,7 +188,8 @@
           persistent: false,
           overlay: true,
           fixed: false,
-          swipeOpen: true
+          swipeOpen: true,
+          debug: true
         }
       ],
       indexPlusOne = function(num) {
