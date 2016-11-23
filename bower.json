@@ -1,6 +1,6 @@
 {
     "name": "px-drawer",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "description": "A responsive mobile first web component for hiding content off screen.",
     "authors": [
         "General Electric",
