@@ -1,3 +1,7 @@
+v0.1.1
+==================
+* Update px-theme to 2.0.1 and update test fixtures
+
 v0.1.0
 ==================
 * Reformat drawer code, remove private methods and properties not used by component
