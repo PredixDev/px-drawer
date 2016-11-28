@@ -1,3 +1,7 @@
+v0.1.3
+==================
+* updated bower and travis files.
+
 v0.1.2
 ==================
 * changing all devDeps to ^
