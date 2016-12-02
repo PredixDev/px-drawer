@@ -1,3 +1,7 @@
+v1.0.1
+==================
+* Update Travis configuration with correct key
+
 v1.0.0
 ==================
 * Updated web component test configuration
