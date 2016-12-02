@@ -31,11 +31,20 @@ Second, import the component to your application with the following tag in your 
 Finally, use the component in your application:
 
 ```
-Insert Your demo code here.
+<style is="custom-style">
+  :root {
+    --px-drawer: {
+      background-color: #000;
+    }
+  }
+</style>
+<px-drawer id="drawer1" fixed overlay>
+  <p>This is content inside of the drawer.</p>
+</px-drawer>
+<button onclick="document.querySelector('#drawer1').toggle()">
+  Click to toggle
+</button>
 ```
-
-<br />
-<hr />
 
 ## Documentation
 
@@ -64,9 +73,6 @@ Navigate to the root of that server (e.g. http://localhost:8080/) in a browser t
 
 ### GE Coding Style Guide
 [GE JS Developer's Guide](https://github.com/GeneralElectric/javascript)
-
-<br />
-<hr />
 
 ## Known Issues
 
