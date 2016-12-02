@@ -1,3 +1,9 @@
+v1.0.0
+==================
+* Updated web component test configuration
+* Added Github pages build/deploy script
+* Updated Travis configuration
+
 v0.1.3
 ==================
 * updated bower and travis files.
