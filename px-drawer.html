@@ -44,7 +44,9 @@ Custom property | Description | Default
 `--px-drawer-background-color` | The background-color of the drawer  |  `#242326` *(gray10)*
 `--px-drawer-width` | The width of the drawer | `256px`
 `--px-drawer-height` | The height of the drawer | `100vh`
-`--px-drawer-overlay-background` | The background color of the overlay | `rgba(0, 0, 0, 0.5))`
+`--px-drawer-overlay-background` | The background color of the overlay | `rgba(0, 0, 0, 0.5)`
+`--px-drawer-target-size` | The size of the swipe target at the edge of the screen | `50px`
+`--px-drawer-target-offset` | The offset of the swipe target from its beginning (i.e. top or left of screen) | `0px`
 
 @element px-drawer.html
 @blurb A responsive mobile first web component for hiding content off screen.
@@ -56,7 +58,7 @@ Custom property | Description | Default
 <dom-module id="px-drawer">
   <template strip-whitespace>
     <style include="px-drawer-styles">
-      
+
     </style>
     <div id="overlay" class="drawer__overlay" on-tap="toggle" hidden$="{{!overlay}}"></div>
     <div id="drawer" class="drawer">
@@ -161,6 +163,7 @@ Custom property | Description | Default
          *
          * @prop align
          * @type String
+         * @default 'left'
          */
         align: {
           type: String,
@@ -213,15 +216,17 @@ Custom property | Description | Default
         },
 
         /**
-         * Logs information to the browser console for debugging purposes if set
-         * to `true`. Disable this property before deploying to production.
+         * Logs information to the browser console and highlights the active swipe
+         * detection area for debugging purposes if set to `true`. Disable this
+         * property before deploying to production.
          *
          * @prop debug
          * @type String
          */
         debug: {
           type: Boolean,
-          value: false
+          value: false,
+          reflectToAttribute: true
         },
 
         /**
@@ -471,7 +476,7 @@ Custom property | Description | Default
        * `persistent`) are set or changed, sets the correct classes on the drawer
        * container to make the drawer behave as requested.
        *
-       * @method _alignHandler
+       * @method _updateUi
        * @param {Boolean} fixed
        * @param {Boolean} overlay
        * @param {Boolean} persistent
@@ -678,10 +683,21 @@ Custom property | Description | Default
       * @param {Event} e - A `track` event fired when the user touches the drawer
       */
       _handleTrackComplete: function(swipedir) {
-        if (swipedir === 'up' && this.align === 'bottom') return this.toggle();
-        if (swipedir === 'down' && this.align === 'bottom') return this.toggle();
-        if (swipedir === 'left' && this.align === 'left') return this.toggle();
-        if (swipedir === 'right') return this.toggle();
+        // If the menu is docked left, swipe right to open or left to close
+        if (this.align === 'left' && swipedir === 'right' && !this.opened) return this.toggle();
+        if (this.align === 'left' && swipedir === 'left' && this.opened) return this.toggle();
+
+        // If the menu is docked right, swipe left to open or right to close
+        if (this.align === 'right' && swipedir === 'left' && !this.opened) return this.toggle();
+        if (this.align === 'right' && swipedir === 'right' && this.opened) return this.toggle();
+
+        // If the menu is docked top, swipe down to open or up to close
+        if (this.align === 'top' && swipedir === 'down' && !this.opened) return this.toggle();
+        if (this.align === 'top' && swipedir === 'up' && this.opened) return this.toggle();
+
+        // If the menu is docked bottom, swipe up to open or down to close
+        if (this.align === 'bottom' && swipedir === 'up' && !this.opened) return this.toggle();
+        if (this.align === 'bottom' && swipedir === 'down' && this.opened) return this.toggle();
       },
 
       /************************************************************************

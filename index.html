@@ -16,6 +16,7 @@
 
   <link rel="import" href="../px-api-viewer/px-api-viewer.html" />
   <link rel="import" href="../px-tabs/px-tab-set.html" />
+  <link rel="import" href="../px-dropdown/px-dropdown.html" />
   <link rel="import" href="../px-demo-snippet/px-demo-snippet.html">
   <link rel="import" href="../px-polymer-font-awesome/polymer-font-awesome.html" />
 
@@ -29,8 +30,7 @@
       <a class="actionable flex flex--right flex--middle" href="https://github.com/PredixDev/px-drawer" target="_blank"><iron-icon class="menu__open" icon="fa:fa-github"></iron-icon>View on Github</a>
       <h1 class="delta">px-drawer</h1>
       <div class="description-text">
-        <p>The px-drawer is a navigation drawer that can slide in from the left, right, top or bottom.
-        Since this is a Mobile component, ensure your browser is either on a mobile device, or in mobile mode, and swipe from the left side of the black rectangle.</p>
+        <p>The px-drawer is a navigation drawer that can slide in from the left, right, top or bottom.</p>
       </div>
       <div class="flex">
         <img class="u-mr--" src="https://img.shields.io/travis/PredixDev/px-drawer.svg?style=flat-square" alt="Travis"/>
@@ -80,11 +80,6 @@
                   <div class="u-ml-">Overlay</div>
                 </div>
                 <div class="flex u-mb-">
-                  <input id="fixed{{indexPlusOne(index)}}" class="toggle__input toggle__input--small" type="checkbox" checked="{{item.fixed::change}}">
-                  <label for$="fixed{{indexPlusOne(index)}}" class="toggle__label toggle__label--small"></label>
-                  <div class="u-ml-">Fixed</div>
-                </div>
-                <div class="flex u-mb-">
                   <input id="swipeOpen{{indexPlusOne(index)}}" class="toggle__input toggle__input--small" type="checkbox" checked="{{item.swipeOpen::change}}">
                   <label for$="swipeOpen{{indexPlusOne(index)}}" class="toggle__label toggle__label--small"></label>
                   <div class="u-ml-">Swipe open</div>
@@ -94,14 +89,26 @@
                   <label for$="debug{{indexPlusOne(index)}}" class="toggle__label toggle__label--small"></label>
                   <div class="u-ml-">Debug</div>
                 </div>
+                <div class="flex u-mb-">
+                  <input id="fixed{{indexPlusOne(index)}}" class="toggle__input toggle__input--small" type="checkbox" checked="{{item.fixed::change}}">
+                  <label for$="fixed{{indexPlusOne(index)}}" class="toggle__label toggle__label--small"></label>
+                  <div class="u-ml-">Fixed</div>
+                </div>
+                <div class="u-mb">
+                  <p class="u-mb--">Align:</p>
+                  <px-dropdown style="width:100%;" value="{{item.align}}" display-value="{{item.align}}">
+                    <px-dropdown-content items={{item.alignOptions}}></px-dropdown-content>
+                  </px-dropdown>
+                </div>
               </div>
+
               <!-- end Demo Box: Set Properties -->
 
               <!-- Demo Box: Show Demos -->
               <div class="demoContainer u-mt+">
                 <div class="flex flex--col">
                   <div class="demo u-p+">
-                    <p style="padding:0 0 5px;">Since this is a Mobile component, ensure your browser is either on a mobile device, or in mobile mode, and swipe from the left side of the black rectangle.</p>
+                    <p style="padding:0 0 5px;">This component is meant to be used on mobile devices. To try it, make sure your browser is in mobile-preview development mode or open this page on your mobile device. To open the menu, swipe in the black rectangle below from the left side of the screen to the right.</p>
                     <div class="position-relative">
                       <px-drawer
                           id="drawer1"
@@ -170,6 +177,7 @@
   <script>
     window.addEventListener('WebComponentsReady', function() {
       var template = document.querySelector('template[is=dom-bind]'),
+      alignOptions = ['left', 'right', 'top', 'bottom'],
       optionsArray = [
         {
           opened: false,
@@ -178,7 +186,9 @@
           fixed: false,
           swipeOpen: true,
           debug: true,
-          parentComponent: ["<p>Since this is a Mobile component, ensure your browser is either on a mobile device, or in mobile mode, and swipe from the left side of the black rectangle.</p><div style='overflow: hidden;position: relative;height: 100%;width: 100%;min-height: 300px;border: 2px solid black;'>", "</div>"]
+          align: 'left',
+          alignOptions: alignOptions,
+          parentComponent: ["<p>This component is meant to be used on mobile devices. To try it, make sure your browser is in mobile-preview development mode or open this page on your mobile device. To open the menu, swipe in the black rectangle below from the left side of the screen to the right.</p><div style='overflow: hidden;position: relative;height: 100%;width: 100%;min-height: 300px;border: 2px solid black;'>", "</div>"]
         }
       ],
       indexPlusOne = function(num) {

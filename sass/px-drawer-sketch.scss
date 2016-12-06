@@ -66,12 +66,42 @@ $inuit-enable-margins: true;
 
 :host([swipe-open]) > .drawer::after {
   position: fixed;
-  top: 56px;
+  visibility: visible;
+  content: '';
+}
+
+:host([swipe-open]) > .drawer.drawer--left::after {
+  top: var(--px-drawer-target-offset, 0px);
   bottom: 0;
   left: 100%;
-  visibility: visible;
-  width: 20px;
-  content: '';
+  width: var(--px-drawer-target-size, 50px);
+}
+
+:host([swipe-open]) > .drawer.drawer--right::after {
+  top: var(--px-drawer-target-offset, 0px);
+  bottom: 0;
+  left: calc(var(--px-drawer-target-size, 50px) * -1);
+  width: var(--px-drawer-target-size, 50px);
+}
+
+:host([swipe-open]) > .drawer.drawer--top::after {
+  top: 100%;
+  left: var(--px-drawer-target-offset, 0px);
+  height: var(--px-drawer-target-size, 50px);
+  width: 100%;
+}
+
+:host([swipe-open]) > .drawer.drawer--bottom::after {
+  top: calc(var(--px-drawer-target-size, 50px) * -1);
+  left: var(--px-drawer-target-offset, 0px);
+  height: var(--px-drawer-target-size, 50px);
+  width: 100%;
+}
+
+
+// For debugging purposes only (only active when `debug` attribute is set)
+:host([swipe-open][debug]) > .drawer::after {
+  background-color: rgba(255,182,193,0.5);
 }
 
 :host .drawer__overlay {

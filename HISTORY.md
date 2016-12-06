@@ -1,3 +1,9 @@
+v1.1.0
+==================
+* Make swipe detection area size and offset configuration with CSS variables
+* Fix swipe detection rules for toggling menu for each `align` direction
+* Make swipe detection area visible when `debug` is active
+
 v1.0.2
 ==================
 * Fix web components test configuration
