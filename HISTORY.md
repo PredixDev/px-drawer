@@ -1,3 +1,7 @@
+v1.2.0
+==================
+* Updated dependencies
+
 v1.1.0
 ==================
 * Make swipe detection area size and offset configuration with CSS variables

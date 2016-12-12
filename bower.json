@@ -1,6 +1,6 @@
 {
   "name": "px-drawer",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "A responsive mobile first web component for hiding content off screen.",
   "authors": [
     "General Electric",
@@ -40,21 +40,21 @@
     "polymer": "^1.6.1",
     "iron-resizable-behavior": "^1.0.5",
     "iron-fit-behavior": "^1.2.5",
-    "px-dropdown": "^2.0.7"
+    "px-dropdown": "^2.1.0"
   },
   "devDependencies": {
-    "px-toggle-design": "^0.2.21",
-    "px-list-inline-design": "^0.2.18",
+    "px-toggle-design": "^1.1.0",
+    "px-list-inline-design": "^0.3.0",
     "iron-demo-helpers": "^1.2.3",
     "px-colors-design": "^0.2.16",
-    "px-spacing-responsive-design": "^0.3.7",
+    "px-spacing-responsive-design": "^0.4.0",
     "px-demo-snippet": "^0.6.10",
     "px-api-viewer": "^0.1.0",
-    "px-spacing-design": "^0.3.17",
-    "px-tabs": "^0.5.7",
-    "px-polymer-font-awesome": "^0.1.9",
-    "px-mobile-design": "^0.1.1",
-    "px-headings-design": "^0.2.23",
-    "px-forms-design": "^0.3.27"
+    "px-spacing-design": "^0.4.0",
+    "px-tabs": "^0.6.0",
+    "px-polymer-font-awesome": "^1.1.0",
+    "px-mobile-design": "^0.2.0",
+    "px-headings-design": "^0.3.0",
+    "px-forms-design": "^1.1.0"
   }
 }
