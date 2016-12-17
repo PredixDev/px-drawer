@@ -1,3 +1,7 @@
+v1.2.2
+==================
+* Fix color dependency
+
 v1.2.1
 ==================
 * Update travis configuration
