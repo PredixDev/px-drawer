@@ -20,13 +20,15 @@ before_script:
 - bower install
 script:
 - xvfb-run wct --skip-plugin sauce
-- if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then wct --plugin sauce --skip-plugin local; fi
-env:
-  global:
-  - secure: arcIdBOTGxcVpD+RFhkK0OubZCVS3cloaiPBeB1pmrEx+EABVAB1FGygZfoxPFhXnu1gkmrgmg+x1CeE1h3QDbZ4oaa8/V0FhJcZRCVNeV/nII0hcc1ILz26eJZA/BnyjXez55uc8tTWZVGmJXu4SJNqF27QMoAA5R87kbOgIN/hcLKiRGS3z8mBBoFHiWmHtfLHMOOX9jMFyZwF3tt9M6cTOATEIExV7z8g14nfuOzyXud494c/sri/VRnWrzJiWpM0mYzkJCmNJ7k/tp0nJImZfSM1ZJvdVBsZQoFvgPpfn+Wk1c+pdNk4Eg2pxaf63g7QE4XARaG+OmaloPlfZHVx7USmpHXt1bGTRsM+eJaCWuTHSGY7wvVZ7jahzx9bia0E6ETD3C1NUBy32HVvTPB++SW29FpcfjG6/gEzSreT2Ji3YKA7Erpdh2WEKivSmb/zK6gZLMO7Y6ZS8M6FVErCfGC25YJ7JvoqmWGkfV61miUyoyZqkx61+f+BF5FIi+4AIwZCD/mQSiIC/y7PNjh3NsrqS/f24a/A45F1ngXOILLkQpooc9EcKUaryBf2tC21MsAwkhUE86bdc3LKEAeim2VFuER+BS6U7N6v2Ps8i9KUtLVfj+UVCPSAENMGrhoYyPX8C47lJ/M4rSnEiqZVu1mUm8OFFLDOWn7d6mE=
-  - secure: E+LVDEPeT0jwl2Apn1ae7Jme4pHwJ5U+i4cRnt7VFkearB7FzvyR7jGPLNF/Ek6z/QhND6+lDep/2RJtjtqeEPspqKJuuSG5OTvo/5oTt6KjneuDy5DjW7KUdYjgeFbPxxYIiclZbPLY2KG/XodaCEMir0cSF9t13b/dEhuoG1E0mWdzt5u64lC6PmdrTVRwlZP7/uxBmKzTpCIiQjYIkrNpwYeMvTyr8KC7K6rVZjtchxWFwirYU4Cb9N5XWGfH4cMbi5VqtNk8WeqWHMIGG9KDIHT+OP/IbO14pREF5fA3EN2ZvXKSKYh1S2ZzVAcAGQqOZ8gNMd9u4qh4e/kJcp5hFh/HcFxCL57GnURQul7YMeigaKAJQx0NadDRtLUi3TGPLCccrWJwHs8ymU+o7Bl519Q+HPzoYvxxKxaT0WvgPyeVGL5VZus4HNmqQ3My5DAjIdO6fb1ZUwbBK1H75//KGhNRmuP0uwKV+TEkQiT6dCt3+Tgnlu8T75W4QPM54/uPm+KRbATHVbJ969qkPin9Ww/dozhwmA5RZNy+6K9TZ1lSV7x7ShJx/y2zapjWiPhXJcNzWlIujg0te0N0P4zlcVP31IKzKIsfMzoJ8BzJjn3OiIwK6BtFcvYECgknkWzf/u6O4R+v/FEk3mFVY+rb1tZvsZ3l01/GqFBIazE=
+- if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then wct --plugin sauce --skip-plugin
+  local; fi
 after_success:
-- if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then openssl aes-256-cbc -k "$password" -in id_rsa.enc -out deploy_key -d; fi
+- if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then openssl aes-256-cbc -k "$DEPLOYSECRET"
+  -in deploy.enc -out deploy_key -d; fi
 - cd $TRAVIS_BUILD_DIR/scripts
 - chmod 755 ghp.sh
-- ./ghp.sh
+- "./ghp.sh"
+env:
+  global:
+  - secure: reXD4b163ciRKrT7h/UudZ9thJyKL699AFT5g6d3OWzpeljuVevF5/pKeycB332I6FYIo8dAn0pTlRSzfvx7Xnl5yQ965h+jbeT9X52+5dR8HM8W+8ek+HDaDMhXVZyu1bWiPAhLon6kXzJ19WF7ljdyOvjTQbzx4USY32boGMveOFwzsEyiIMOnmEofouqkCTy+14Ih7KsJ5HNEDhsSI/oaogZIpJETuhGkaotZakHXM4b9SOU66dT2trXz7Vo3nLJd5upzIylZ/ymek+B0+m6pyqrNeGaRCq3EyYQmxeXMA5RUgoEZPrDCZlJtWjkETT1M5er5PPChW8ut0rZvyej0UcjA0GGzGODBXJOZxSxIueRXE6aIucRi/ZOLzD32KljOQ0tXZ9u+yuxdtE2k7im91eAfCaiRV2rkDu6KhElmeSWrVQNI/vD+UgrTB8APmImMt+BUvxgUjCRPH2n2gurmpVsvhD8/qcS65ruB5nEtMburais0hiY/gHO3vVBjiHzgFkHH4Prio8NPmMBZB2/L8OmR4R57/sARhHt15FFulQhvv/+qgrsmJYjk+A8yDmJ6rp4mGy2B3hZIQRHrV3mR5FACyaBfEpq8Pm5rrhathZoUofZihKNIbcf6F51SNNKbVt0f0TpQVhw3anYnXPcmLjLQkn0MQdh5Hz5Rs3U=
+  - secure: GU/ZAGLPNwJpS6CS36JucPAA/hZPMAPy2fevLHkSTHsLLJLxEW3+wUeOHggODNnwtBXqMBNyKSWFm70FEH3neUrB2uqLDpjnjJG2WVKFGCZz61f3WDl+9FZ0JPfN0Rm42DuGBzJn2PmBKFqI27ZN1FwSKJw5R81xuYpeRp65kO8sEYg9qQomZ0VV8D24ShIF1+mR759Mob6I1Jlid6U9l3MhUssI7fH23S6uXrX+sfcd9kHuL9Txx/CnRa1W1uAuorlAggBER7g9EhxDDmX27L8Mm7NKVFXrSuRs5wHAoJ/FYl6D4dZ8hXsW0fFce29e216tvNPrL3HU8GfUHrmm6QQUoPaWvecAq2AgjcTEsqZlaKwhkfGWw+8e9yT95QMbYCtMMYyLfVykZq2ANj0fbym7wIjt98bkwR0IrogXAvz3j1cAh/RCe0Wi4UiiKY3KCVX0oGHpESbjqySiYNwRpJshUUpYAZ2XihWjEWzEdrgJ00P6zUM/yugj3QgDq0b7GiBOyts/DRKBTvxlJslUMK1OCELx5v07ebNsZsye1R5622OlX3dkyRNjk6MeYRyGT1O31t3Yqf1w3Lmwtfweak38w4/+QSBCpy+EtkkoH09HwMwFEGsRlFZGXn/d4DYIDJpg0wTHYVFYky3BJUK8UHrHMiznDhoGd1ESUU7/HPE=
