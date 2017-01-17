@@ -1,3 +1,7 @@
+v1.2.4
+==================
+* Update colors design to pick up new colors
+
 v1.2.3
 ==================
 * changing ghp.sh to account for Alpha releases
