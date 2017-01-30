@@ -1,3 +1,7 @@
+v1.2.5
+==================
+* updated so px-demo-snippet and px-api-viewer have new grays
+
 v1.2.4
 ==================
 * Update colors design to pick up new colors
