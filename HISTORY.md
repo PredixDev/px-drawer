@@ -1,3 +1,7 @@
+v1.2.7
+==================
+* update dependencies
+
 v1.2.6
 ==================
 * updated to px-demo
