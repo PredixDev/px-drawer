@@ -1,3 +1,7 @@
+v2.0.0
+==================
+* update dependencies and colors for design refresh
+
 v1.2.7
 ==================
 * update dependencies
