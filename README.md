@@ -2,7 +2,7 @@
 
 ## Overview
 
-The px-drawer is a navigation drawer that can slide in from the left, right, top or bottom.
+`Px-drawer` is a Predix UI component which provides a navigation drawer that can slide in from the left, right, top, or bottom.
 
 ## Usage
 
