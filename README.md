@@ -1,8 +1,9 @@
-# px-drawer [![Build Status](https://travis-ci.org/PredixDev/px-drawer.svg?branch=master)](https://travis-ci.org/PredixDev/px-drawer)
+# PX-DRAWER IS NOW DEPRECATED
+## It has been replaced by app-layout: [https://www.webcomponents.org/element/PolymerElements/app-layout/elements/app-drawer](https://www.webcomponents.org/element/PolymerElements/app-layout/elements/app-drawer)
 
 ## Overview
 
-The px-drawer is a navigation drawer that can slide in from the left, right, top or bottom.
+`Px-drawer` is a Predix UI component which provides a navigation drawer that can slide in from the left, right, top, or bottom.
 
 ## Usage
 
