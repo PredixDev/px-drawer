@@ -1,4 +1,4 @@
-# PX-CHART IS NOW DEPRECATED
+# PX-DRAWER IS NOW DEPRECATED
 ## It has been replaced by app-layout: [https://www.webcomponents.org/element/PolymerElements/app-layout/elements/app-drawer](https://www.webcomponents.org/element/PolymerElements/app-layout/elements/app-drawer)
 
 ## Overview
